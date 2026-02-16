@@ -370,7 +370,7 @@ export default function AdminDashboard() {
       {/* Item-Level Descriptive Statistics */}
       <div className="dashboard-panel">
         <h3>Item-Level Descriptive Statistics {filter !== 'all' ? `(${filter})` : '(filtered view)'}</h3>
-        {['B', 'C', 'D'].map((secKey) => (
+        {['A', 'B', 'C'].map((secKey) => (
           <div key={secKey} style={{ marginBottom: '1.5rem' }}>
             <h4 style={{ fontSize: '1rem', color: 'var(--primary)', marginBottom: '0.5rem' }}>
               {displaySections[secKey].title}

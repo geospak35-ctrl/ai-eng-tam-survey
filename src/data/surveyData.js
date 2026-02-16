@@ -1,6 +1,6 @@
 // ============================================================
 // AI-Eng-TAM Survey Data Definitions
-// Complete item codes, text, and Section A tool categories
+// Complete item codes, text, and Section D tool categories
 // for all three stakeholder types.
 // ============================================================
 
@@ -15,10 +15,10 @@ export const LIKERT_LABELS = [
 ];
 
 // ============================================================
-// Section A: AI Tool Categories & Tools per Stakeholder
+// Section D: AI Tool Categories & Tools per Stakeholder
 // ============================================================
 
-const SECTION_A_COMMON_CATEGORIES = [
+const SECTION_D_COMMON_CATEGORIES = [
   {
     id: 'ML',
     name: 'Machine Learning (ML)',
@@ -73,7 +73,7 @@ const TOOLS_BY_CATEGORY = {
     DL: ['TensorFlow / Keras', 'PyTorch', 'ONNX', 'MATLAB Deep Learning Toolbox'],
     NLP: ['ChatGPT', 'Claude', 'Google Gemini', 'Google Vertex AI (LLMs)', 'Azure OpenAI Service', 'spaCy / NLTK', 'BERT-based tools', 'Grammarly'],
     CV: ['OpenCV', 'YOLO', 'TensorFlow Vision Models', 'MATLAB Computer Vision Toolbox', 'ImageJ / Fiji'],
-    GenAI: ['ChatGPT', 'Claude', 'Google Gemini', 'GitHub Copilot', 'DALL·E / Stable Diffusion / Midjourney'],
+    GenAI: ['ChatGPT', 'Claude', 'Google Gemini', 'GitHub Copilot', 'DALL\u00B7E / Stable Diffusion / Midjourney'],
     Recommender: ['IBM Watson', 'Azure AI Services', 'Google Recommendation AI', 'Learning analytics platforms (e.g., LMS-embedded)', 'Adaptive learning systems'],
     EngDesign: ['ANSYS (AI/ML features)', 'Autodesk Fusion (AI features)', 'Siemens NX (AI features)', 'MATLAB/Simulink AI tools', 'Digital twin platforms'],
     Robotics: ['ROS / ROS2', 'Gazebo', 'NVIDIA Isaac', 'TurtleBot', 'PX4 Autopilot', 'Educational platforms (e.g., LEGO, VEX, Arduino AI kits)'],
@@ -84,7 +84,7 @@ const TOOLS_BY_CATEGORY = {
     DL: ['TensorFlow / Keras', 'PyTorch', 'MATLAB Deep Learning Toolbox', 'Google Colab / Jupyter (for DL)'],
     NLP: ['ChatGPT', 'Claude', 'Google Gemini', 'Google Vertex AI (LLMs)', 'Grammarly', 'spaCy / NLTK', 'BERT-based tools'],
     CV: ['OpenCV', 'YOLO', 'TensorFlow Vision Models', 'MATLAB Computer Vision Toolbox', 'ImageJ / Fiji'],
-    GenAI: ['ChatGPT', 'Claude', 'Google Gemini', 'GitHub Copilot', 'DALL·E / Stable Diffusion / Midjourney'],
+    GenAI: ['ChatGPT', 'Claude', 'Google Gemini', 'GitHub Copilot', 'DALL\u00B7E / Stable Diffusion / Midjourney'],
     Recommender: ['IBM Watson', 'Azure AI Services', 'Google Recommendation AI'],
     EngDesign: ['ANSYS (AI/ML features)', 'Autodesk Fusion (AI features)', 'Siemens NX (AI features)', 'MATLAB/Simulink AI tools', 'Digital twin platforms'],
     Robotics: ['ROS / ROS2', 'Gazebo', 'NVIDIA Isaac', 'TurtleBot', 'PX4 Autopilot', 'Educational platforms (e.g., LEGO, VEX, Arduino AI kits)'],
@@ -95,43 +95,55 @@ const TOOLS_BY_CATEGORY = {
     DL: ['TensorFlow / Keras', 'PyTorch', 'ONNX', 'MATLAB Deep Learning Toolbox'],
     NLP: ['ChatGPT (Enterprise)', 'Claude (Enterprise)', 'Google Gemini (Enterprise)', 'Azure OpenAI Service', 'Amazon Bedrock', 'Google Vertex AI (LLMs)', 'spaCy', 'BERT-based systems'],
     CV: ['OpenCV', 'YOLO', 'TensorFlow Vision Models', 'MATLAB Computer Vision Toolbox', 'ImageJ / Fiji', 'Cognex Vision', 'NVIDIA Metropolis'],
-    GenAI: ['ChatGPT (Enterprise)', 'Claude (Enterprise)', 'Google Gemini (Enterprise)', 'GitHub Copilot (Enterprise)', 'DALL·E / Stable Diffusion / Midjourney (Enterprise)'],
+    GenAI: ['ChatGPT (Enterprise)', 'Claude (Enterprise)', 'Google Gemini (Enterprise)', 'GitHub Copilot (Enterprise)', 'DALL\u00B7E / Stable Diffusion / Midjourney (Enterprise)'],
     Recommender: ['IBM Watson', 'Azure AI Services', 'Salesforce Einstein', 'SAP AI', 'ServiceNow AI'],
-    EngDesign: ['ANSYS (AI/ML features)', 'Autodesk Fusion (AI features)', 'Siemens NX / Teamcenter (AI features)', 'Dassault Systèmes (AI features)', 'MATLAB/Simulink AI tools', 'Digital twin platforms (e.g., Azure Digital Twins)'],
+    EngDesign: ['ANSYS (AI/ML features)', 'Autodesk Fusion (AI features)', 'Siemens NX / Teamcenter (AI features)', 'Dassault Syst\u00E8mes (AI features)', 'MATLAB/Simulink AI tools', 'Digital twin platforms (e.g., Azure Digital Twins)'],
     Robotics: ['ROS / ROS2', 'Gazebo', 'NVIDIA Isaac', 'PX4 Autopilot', 'Industrial robot AI controllers', 'Autonomous inspection platforms'],
     Expert: ['Drools', 'CLIPS', 'Prolog-based systems', 'Rules engines embedded in PLM/ERP'],
   },
 };
 
-// Section A question phrasing per stakeholder
-const SECTION_A_QUESTION = {
+// Section D question phrasing per stakeholder
+const SECTION_D_QUESTION = {
   faculty: 'Have you used or incorporated tools in this category?',
   student: 'Have you used tools in this category in your engineering learning activities?',
   practitioner: 'Are new graduates or early-career engineers expected to use tools in this category?',
 };
 
-export function getSectionAData(stakeholderType) {
+// Section D instruction text per stakeholder (displayed under heading)
+const SECTION_D_INSTRUCTION = {
+  faculty: 'For each AI category below, indicate whether you have used or incorporated tools in this category in your teaching, research, or assessment activities. If yes, select which tools apply.',
+  student: 'For each AI category below, indicate whether you have used tools in this category in your engineering coursework, labs, or projects. If yes, select which tools apply.',
+  practitioner: 'For each AI category below, indicate whether new graduates or early-career engineers are expected to use tools in this category in your professional context. If yes, select commonly expected tools.',
+};
+
+export function getSectionDData(stakeholderType) {
   return {
-    question: SECTION_A_QUESTION[stakeholderType],
-    categories: SECTION_A_COMMON_CATEGORIES.map((cat) => ({
+    question: SECTION_D_QUESTION[stakeholderType],
+    instruction: SECTION_D_INSTRUCTION[stakeholderType],
+    categories: SECTION_D_COMMON_CATEGORIES.map((cat) => ({
       ...cat,
       tools: TOOLS_BY_CATEGORY[stakeholderType][cat.id],
     })),
   };
 }
 
+// Keep backward-compatible alias
+export const getSectionAData = getSectionDData;
+
 // ============================================================
-// Sections B, C, D: Likert Items per Stakeholder
+// Sections A, B, C: Likert Items per Stakeholder
+// (formerly B, C, D — renumbered after moving tool usage to Section D)
 // ============================================================
 
 const FACULTY_LIKERT = {
-  B: {
-    title: 'Section B: Perceived Value and Usability of AI for Teaching and Learning',
+  A: {
+    title: 'Section A: Perceived Value and Usability of AI for Teaching and Learning',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'PU-L',
-        name: 'B1. Perceived Usefulness\u2014Learning (PU-L)',
+        name: 'A1. Perceived Usefulness\u2014Learning (PU-L)',
         items: [
           { code: 'PU-L1', text: 'Using AI tools in my courses can improve students\u2019 conceptual understanding of engineering topics when appropriately designed.' },
           { code: 'PU-L2', text: 'AI tools enable learning activities that would be difficult or impractical to implement without AI (e.g., rapid iteration, simulation, critique).' },
@@ -141,7 +153,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'PU-E',
-        name: 'B2. Perceived Usefulness\u2014Faculty Efficiency (PU-E)',
+        name: 'A2. Perceived Usefulness\u2014Faculty Efficiency (PU-E)',
         items: [
           { code: 'PU-E1', text: 'AI tools improve my efficiency in preparing instructional materials, assessments, or feedback.' },
           { code: 'PU-E2', text: 'AI tools help me redesign courses or assignments in ways that better align with learning goals.' },
@@ -149,7 +161,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'PEU',
-        name: 'B3. Perceived Ease of Pedagogical Integration (PEU)',
+        name: 'A3. Perceived Ease of Pedagogical Integration (PEU)',
         items: [
           { code: 'PEU1', text: 'I find it manageable to design assignments where AI tool use is scaffolded rather than unrestricted.' },
           { code: 'PEU2', text: 'I can clearly explain to students when, how, and why AI tools may be used in my course.' },
@@ -158,7 +170,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'EJ',
-        name: 'B4. Epistemic Trust and Judgment (EJ)',
+        name: 'A4. Epistemic Trust and Judgment (EJ)',
         items: [
           { code: 'EJ1', text: 'I am confident in recognizing when AI outputs conflict with fundamental engineering principles.' },
           { code: 'EJ2', text: 'I design learning activities so that AI outputs must be evaluated, tested, or defended, not accepted at face value.' },
@@ -167,7 +179,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'BI',
-        name: 'B5. Behavioral Intention for Instructional Use (BI)',
+        name: 'A5. Behavioral Intention for Instructional Use (BI)',
         items: [
           { code: 'BI1', text: 'I intend to integrate AI tools into my courses in ways that directly support student learning, not just task completion.' },
           { code: 'BI2', text: 'I expect my use of AI-mediated learning activities to increase over time.' },
@@ -176,13 +188,13 @@ const FACULTY_LIKERT = {
       },
     ],
   },
-  C: {
-    title: 'Section C: Instructional Design, Guardrails, and Student Ownership in AI-Mediated Learning',
+  B: {
+    title: 'Section B: Instructional Design, Guardrails, and Student Ownership in AI-Mediated Learning',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'MU',
-        name: 'C1. Modes of AI Use in Teaching (MU)',
+        name: 'B1. Modes of AI Use in Teaching (MU)',
         items: [
           { code: 'MU1', text: 'I use AI tools as a learning tutor or coach (e.g., prompting explanation, asking follow-up questions) rather than as an answer provider.' },
           { code: 'MU2', text: 'I use AI tools to support design exploration or \u201cwhat-if\u201d analysis, not just solution generation.' },
@@ -192,7 +204,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'LP',
-        name: 'C2. Placement of AI in the Learning Process (LP)',
+        name: 'B2. Placement of AI in the Learning Process (LP)',
         items: [
           { code: 'LP1', text: 'I require students to attempt problem solving or design before using AI tools.' },
           { code: 'LP2', text: 'I design activities where AI tools are used after initial work to refine, test, or challenge student ideas.' },
@@ -201,7 +213,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'GB',
-        name: 'C3. Guardrails and Constraints (GB)',
+        name: 'B3. Guardrails and Constraints (GB)',
         items: [
           { code: 'GB1', text: 'I explicitly define what types of AI use are allowed, limited, or prohibited for each assignment.' },
           { code: 'GB2', text: 'I design assignments so that AI tools cannot replace core cognitive work (e.g., reasoning, modeling, justification).' },
@@ -211,7 +223,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'OA',
-        name: 'C4. Student Ownership and Accountability (OA)',
+        name: 'B4. Student Ownership and Accountability (OA)',
         items: [
           { code: 'OA1', text: 'I require students to explain their own contribution versus AI assistance in submitted work.' },
           { code: 'OA2', text: 'I require students to defend or justify AI-assisted decisions using engineering principles.' },
@@ -221,7 +233,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'EV',
-        name: 'C5. Evaluation and Verification (EV)',
+        name: 'B5. Evaluation and Verification (EV)',
         items: [
           { code: 'EV1', text: 'I require testing, validation, or verification of AI-assisted code, models, or analyses.' },
           { code: 'EV2', text: 'I model how engineers should question, test, and refine AI outputs.' },
@@ -230,7 +242,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'ET',
-        name: 'C6. Ethics and Responsible Use (ET)',
+        name: 'B6. Ethics and Responsible Use (ET)',
         items: [
           { code: 'ET1', text: 'I address potential bias, limitations, or uncertainty in AI outputs relevant to engineering contexts.' },
           { code: 'ET2', text: 'I clearly communicate what data or information should not be entered into AI tools.' },
@@ -240,13 +252,13 @@ const FACULTY_LIKERT = {
       },
     ],
   },
-  D: {
-    title: 'Section D: AI Readiness for Educating AI-Ready Engineers (AR / CR)',
+  C: {
+    title: 'Section C: AI Readiness for Educating AI-Ready Engineers (AR / CR)',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'AR',
-        name: 'D1. Faculty AI Readiness (AR)',
+        name: 'C1. Faculty AI Readiness (AR)',
         items: [
           { code: 'AR1', text: 'I feel prepared to integrate AI tools appropriately in my teaching, research, or assessment activities.' },
           { code: 'AR2', text: 'I feel confident determining when AI tools are appropriate versus when traditional approaches are preferable.' },
@@ -260,7 +272,7 @@ const FACULTY_LIKERT = {
       },
       {
         id: 'CR',
-        name: 'D2. Preparing Career-Ready Engineers (CR)',
+        name: 'C2. Preparing Career-Ready Engineers (CR)',
         items: [
           { code: 'CR1', text: 'I design AI-related activities that connect to how AI is used in professional engineering practice.' },
           { code: 'CR2', text: 'I help students develop portable AI competencies that will remain relevant as specific tools change.' },
@@ -274,13 +286,13 @@ const FACULTY_LIKERT = {
 };
 
 const STUDENT_LIKERT = {
-  B: {
-    title: 'Section B: Perceived Value and Use of AI for Learning and Engineering Practice',
+  A: {
+    title: 'Section A: Perceived Value and Use of AI for Learning and Engineering Practice',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'PU-L',
-        name: 'B1. Perceived Usefulness\u2014Learning (PU-L)',
+        name: 'A1. Perceived Usefulness\u2014Learning (PU-L)',
         items: [
           { code: 'PU-L1', text: 'When used appropriately, AI tools help me understand engineering concepts more deeply, not just complete assignments.' },
           { code: 'PU-L2', text: 'AI tools enable learning activities (e.g., rapid iteration, design exploration, critique) that would be difficult to do otherwise.' },
@@ -290,7 +302,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'PU-E',
-        name: 'B2. Perceived Usefulness\u2014Efficiency (PU-E)',
+        name: 'A2. Perceived Usefulness\u2014Efficiency (PU-E)',
         items: [
           { code: 'PU-E1', text: 'AI tools help me work more efficiently on engineering tasks.' },
           { code: 'PU-E2', text: 'AI tools save time that I can reinvest in understanding, testing, or improving my work.' },
@@ -298,7 +310,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'PEU',
-        name: 'B3. Perceived Ease of Responsible Use (PEU)',
+        name: 'A3. Perceived Ease of Responsible Use (PEU)',
         items: [
           { code: 'PEU1', text: 'I understand how to use AI tools in ways that support my learning rather than replace it.' },
           { code: 'PEU2', text: 'I find it manageable to follow course rules or expectations about AI use.' },
@@ -307,7 +319,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'EJ',
-        name: 'B4. Epistemic Judgment (EJ)',
+        name: 'A4. Epistemic Judgment (EJ)',
         items: [
           { code: 'EJ1', text: 'I can recognize when AI outputs conflict with engineering principles (e.g., units, assumptions, constraints).' },
           { code: 'EJ2', text: 'I do not rely on AI outputs without checking, testing, or justifying them.' },
@@ -316,7 +328,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'BI',
-        name: 'B5. Behavioral Intention (BI)',
+        name: 'A5. Behavioral Intention (BI)',
         items: [
           { code: 'BI1', text: 'I intend to use AI tools in ways that improve my learning and engineering judgment, not just my grades.' },
           { code: 'BI2', text: 'I expect my use of AI tools in engineering learning to increase as I learn how to use them responsibly.' },
@@ -325,13 +337,13 @@ const STUDENT_LIKERT = {
       },
     ],
   },
-  C: {
-    title: 'Section C: AI Use Practices, Guardrails, and Ownership in Engineering Learning',
+  B: {
+    title: 'Section B: AI Use Practices, Guardrails, and Ownership in Engineering Learning',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'MU',
-        name: 'C1. Modes of AI Use (MU)',
+        name: 'B1. Modes of AI Use (MU)',
         items: [
           { code: 'MU1', text: 'I use AI tools as a tutor or coach to help me think through problems.' },
           { code: 'MU2', text: 'I use AI tools to explore \u201cwhat-if\u201d scenarios or alternative designs.' },
@@ -341,7 +353,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'LP',
-        name: 'C2. Timing in the Learning Process (LP)',
+        name: 'B2. Timing in the Learning Process (LP)',
         items: [
           { code: 'LP1', text: 'I usually attempt a problem or design before using AI tools.' },
           { code: 'LP2', text: 'I use AI tools after initial work to refine, test, or challenge my ideas.' },
@@ -350,7 +362,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'GB',
-        name: 'C3. Guardrails and Boundaries (GB)',
+        name: 'B3. Guardrails and Boundaries (GB)',
         items: [
           { code: 'GB1', text: 'I set personal boundaries for AI tool use to ensure I am still learning key concepts.' },
           { code: 'GB2', text: 'I follow course-specific expectations about AI use for each assignment.' },
@@ -359,7 +371,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'OA',
-        name: 'C4. Ownership and Accountability (OA)',
+        name: 'B4. Ownership and Accountability (OA)',
         items: [
           { code: 'OA1', text: 'I can clearly explain what I contributed versus what AI contributed to my work.' },
           { code: 'OA2', text: 'I can defend AI-assisted decisions using engineering reasoning, not just AI explanations.' },
@@ -369,7 +381,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'EV',
-        name: 'C5. Evaluation and Verification (EV)',
+        name: 'B5. Evaluation and Verification (EV)',
         items: [
           { code: 'EV1', text: 'I test or verify AI-assisted code, models, or calculations.' },
           { code: 'EV2', text: 'I check AI outputs against known constraints, assumptions, or physical principles.' },
@@ -378,7 +390,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'ET',
-        name: 'C6. Ethics and Responsible Use (ET)',
+        name: 'B6. Ethics and Responsible Use (ET)',
         items: [
           { code: 'ET1', text: 'I understand that AI outputs may reflect bias or limitations.' },
           { code: 'ET2', text: 'I know what information should not be entered into AI tools (e.g., personal, proprietary, or sensitive data).' },
@@ -388,13 +400,13 @@ const STUDENT_LIKERT = {
       },
     ],
   },
-  D: {
-    title: 'Section D: AI Readiness and Career Preparedness (AR / CR)',
+  C: {
+    title: 'Section C: AI Readiness and Career Preparedness (AR / CR)',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'AR',
-        name: 'D1. Current Readiness (AR)',
+        name: 'C1. Current Readiness (AR)',
         items: [
           { code: 'AR1', text: 'I feel prepared to use AI tools appropriately in my current engineering coursework or projects.' },
           { code: 'AR2', text: 'I feel confident selecting when AI tools are helpful versus when traditional engineering methods are more appropriate.' },
@@ -404,7 +416,7 @@ const STUDENT_LIKERT = {
       },
       {
         id: 'CR',
-        name: 'D2. Career Readiness and Professional Signaling (CR)',
+        name: 'C2. Career Readiness and Professional Signaling (CR)',
         items: [
           { code: 'CR1', text: 'AI skills will be important in my future engineering career.' },
           { code: 'CR2', text: 'I am intentionally developing AI-augmented engineering skills, not just tool familiarity.' },
@@ -418,13 +430,13 @@ const STUDENT_LIKERT = {
 };
 
 const PRACTITIONER_LIKERT = {
-  B: {
-    title: 'Section B: Perceived Value and Usability of AI in Engineering Practice',
+  A: {
+    title: 'Section A: Perceived Value and Usability of AI in Engineering Practice',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'PU-L',
-        name: 'B1. Perceived Usefulness\u2014Engineering Practice (PU-L)',
+        name: 'A1. Perceived Usefulness\u2014Engineering Practice (PU-L)',
         items: [
           { code: 'PU-L1', text: 'AI tools improve the quality of engineering work expected of new graduates or early-career engineers.' },
           { code: 'PU-L2', text: 'AI tools enable engineering activities that would be difficult or impractical without AI (e.g., large-scale data analysis, design optimization, rapid prototyping).' },
@@ -434,7 +446,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'PU-E',
-        name: 'B2. Perceived Usefulness\u2014Efficiency (PU-E)',
+        name: 'A2. Perceived Usefulness\u2014Efficiency (PU-E)',
         items: [
           { code: 'PU-E1', text: 'AI tools increase efficiency in professional engineering practice.' },
           { code: 'PU-E2', text: 'Efficiency gains from AI tools allow engineers to spend more time on judgment-intensive tasks such as verification, design review, and client interaction.' },
@@ -442,7 +454,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'PEU',
-        name: 'B3. Perceived Ease of Organizational Integration (PEU)',
+        name: 'A3. Perceived Ease of Organizational Integration (PEU)',
         items: [
           { code: 'PEU1', text: 'AI tools are sufficiently usable for new graduates or early-career engineers to apply effectively in typical workflows.' },
           { code: 'PEU2', text: 'Organizational guidance and policies make it clear how and when AI tools should be used in engineering work.' },
@@ -451,7 +463,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'EJ',
-        name: 'B4. Epistemic Judgment (EJ)',
+        name: 'A4. Epistemic Judgment (EJ)',
         items: [
           { code: 'EJ1', text: 'New graduates or early-career engineers can recognize when AI outputs conflict with engineering principles or standards.' },
           { code: 'EJ2', text: 'New graduates or early-career engineers know when AI-assisted outputs require verification using engineering methods.' },
@@ -460,7 +472,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'BI',
-        name: 'B5. Behavioral Expectation (BI)',
+        name: 'A5. Behavioral Expectation (BI)',
         items: [
           { code: 'BI1', text: 'AI tool use will be increasingly expected of engineering graduates in professional practice.' },
           { code: 'BI2', text: 'I expect AI tool use to increase across engineering roles in the near future.' },
@@ -469,13 +481,13 @@ const PRACTITIONER_LIKERT = {
       },
     ],
   },
-  C: {
-    title: 'Section C: Workplace AI Practices, Judgment, and Accountability in Engineering',
+  B: {
+    title: 'Section B: Workplace AI Practices, Judgment, and Accountability in Engineering',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'MU',
-        name: 'C1. Modes of AI Use in Practice (MU)',
+        name: 'B1. Modes of AI Use in Practice (MU)',
         items: [
           { code: 'MU1', text: 'Engineering graduates use AI tools to augment their reasoning (e.g., exploring options, testing assumptions) rather than to replace it.' },
           { code: 'MU2', text: 'Engineering graduates use AI tools for design exploration, trade-off analysis, or \u201cwhat-if\u201d evaluation.' },
@@ -485,7 +497,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'LP',
-        name: 'C2. Timing and Workflow Integration (LP)',
+        name: 'B2. Timing and Workflow Integration (LP)',
         items: [
           { code: 'LP1', text: 'Engineering graduates apply their own analysis or reasoning before incorporating AI-generated outputs.' },
           { code: 'LP2', text: 'Engineering graduates use AI tools after initial engineering analysis to refine, test, or challenge their conclusions.' },
@@ -494,7 +506,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'GB',
-        name: 'C3. Organizational Guardrails and Governance (GB)',
+        name: 'B3. Organizational Guardrails and Governance (GB)',
         items: [
           { code: 'GB1', text: 'My organization has clear policies defining appropriate and inappropriate uses of AI tools in engineering work.' },
           { code: 'GB2', text: 'Engineering workflows in my organization include checks that prevent AI tools from replacing critical engineering judgment.' },
@@ -503,7 +515,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'OA',
-        name: 'C4. Professional Ownership and Accountability (OA)',
+        name: 'B4. Professional Ownership and Accountability (OA)',
         items: [
           { code: 'OA1', text: 'Engineering graduates can clearly explain their own contribution versus AI assistance in their work.' },
           { code: 'OA2', text: 'Engineering graduates can defend AI-assisted decisions to colleagues, clients, or regulators using engineering principles.' },
@@ -513,7 +525,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'EV',
-        name: 'C5. Evaluation and Verification (EV)',
+        name: 'B5. Evaluation and Verification (EV)',
         items: [
           { code: 'EV1', text: 'Engineering graduates test and verify AI-assisted code, models, or analyses using appropriate engineering methods.' },
           { code: 'EV2', text: 'Engineering graduates check AI outputs against known constraints, standards, or physical principles.' },
@@ -522,7 +534,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'ET',
-        name: 'C6. Ethics and Responsible Use (ET)',
+        name: 'B6. Ethics and Responsible Use (ET)',
         items: [
           { code: 'ET1', text: 'Engineering graduates are aware that AI outputs may reflect bias from training data or design choices.' },
           { code: 'ET2', text: 'Engineering graduates understand what information (e.g., proprietary, sensitive, or regulated data) should not be entered into AI tools.' },
@@ -532,13 +544,13 @@ const PRACTITIONER_LIKERT = {
       },
     ],
   },
-  D: {
-    title: 'Section D: AI Readiness for AI-Integrated Engineering Practice (AR / CR)',
+  C: {
+    title: 'Section C: AI Readiness for AI-Integrated Engineering Practice (AR / CR)',
     instruction: 'Please indicate your level of agreement with each statement using the scale below.',
     constructs: [
       {
         id: 'AR',
-        name: 'D1. Graduate AI Readiness (AR)',
+        name: 'C1. Graduate AI Readiness (AR)',
         items: [
           { code: 'AR1', text: 'Engineering graduates are prepared to use AI tools appropriately in entry-level engineering roles.' },
           { code: 'AR2', text: 'Engineering graduates can determine when AI tools add value versus when traditional engineering approaches are more appropriate.' },
@@ -552,7 +564,7 @@ const PRACTITIONER_LIKERT = {
       },
       {
         id: 'CR',
-        name: 'D2. Graduate Workforce Preparedness (CR)',
+        name: 'C2. Graduate Workforce Preparedness (CR)',
         items: [
           { code: 'CR1', text: 'Engineering graduates can demonstrate AI competency during the hiring process (e.g., interviews, work samples, portfolios).' },
           { code: 'CR2', text: 'Engineering graduates possess AI skills that are transferable across tools and platforms, not limited to specific software.' },
@@ -579,7 +591,7 @@ export function getLikertSections(stakeholderType) {
 export function getAllItemCodes(stakeholderType) {
   const sections = LIKERT_DATA[stakeholderType];
   const codes = [];
-  for (const sectionKey of ['B', 'C', 'D']) {
+  for (const sectionKey of ['A', 'B', 'C']) {
     for (const construct of sections[sectionKey].constructs) {
       for (const item of construct.items) {
         codes.push(item.code);

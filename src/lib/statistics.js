@@ -102,7 +102,7 @@ export function aggregateByConstruct(likertData, respondents, likertSections) {
   // Collect construct->items mapping from all stakeholder types
   for (const stType of ['faculty', 'student', 'practitioner']) {
     const sections = likertSections(stType);
-    for (const secKey of ['B', 'C', 'D']) {
+    for (const secKey of ['A', 'B', 'C']) {
       for (const construct of sections[secKey].constructs) {
         constructIds.add(construct.id);
         if (!constructItems[construct.id]) {

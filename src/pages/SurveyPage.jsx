@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getSectionAData, getLikertSections } from '../data/surveyData';
+import { getSectionDData, getLikertSections } from '../data/surveyData';
 import { submitSurvey } from '../lib/supabase';
 import ProgressBar from '../components/ProgressBar';
 import LikertSection from '../components/LikertSection';
-import SectionA from '../components/SectionA';
+import SectionD from '../components/SectionD';
 import DemographicsForm from '../components/DemographicsForm';
 
 const TITLES = {
@@ -13,7 +13,7 @@ const TITLES = {
   practitioner: 'Practitioner / Hiring Manager Survey',
 };
 
-const TOTAL_STEPS = 5; // B, C, D, A, Demographics
+const TOTAL_STEPS = 5; // A, B, C, D, Demographics
 
 export default function SurveyPage() {
   const { stakeholderType } = useParams();
@@ -28,23 +28,23 @@ export default function SurveyPage() {
     }
   }, [stakeholderType, navigate]);
 
-  const [step, setStep] = useState(0); // 0=B, 1=C, 2=D, 3=A, 4=Demo
+  const [step, setStep] = useState(0); // 0=A, 1=B, 2=C, 3=D, 4=Demo
   const [likertResponses, setLikertResponses] = useState({});
-  const [sectionAResponses, setSectionAResponses] = useState({});
+  const [sectionDResponses, setSectionDResponses] = useState({});
   const [demographics, setDemographics] = useState({});
   const [validationError, setValidationError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const likertSections = getLikertSections(stakeholderType);
-  const sectionAData = getSectionAData(stakeholderType);
+  const sectionDData = getSectionDData(stakeholderType);
 
   const handleLikertResponse = (itemCode, value) => {
     setLikertResponses((prev) => ({ ...prev, [itemCode]: value }));
     setValidationError('');
   };
 
-  const handleSectionAUpdate = (categoryId, data) => {
-    setSectionAResponses((prev) => ({ ...prev, [categoryId]: data }));
+  const handleSectionDUpdate = (categoryId, data) => {
+    setSectionDResponses((prev) => ({ ...prev, [categoryId]: data }));
     setValidationError('');
   };
 
@@ -62,11 +62,11 @@ export default function SurveyPage() {
     return unanswered;
   };
 
-  // Validate Section A: all categories must have yes/no answered
-  const validateSectionA = () => {
+  // Validate Section D: all categories must have yes/no answered
+  const validateSectionD = () => {
     const unanswered = [];
-    for (const cat of sectionAData.categories) {
-      const resp = sectionAResponses[cat.id];
+    for (const cat of sectionDData.categories) {
+      const resp = sectionDResponses[cat.id];
       if (!resp || resp.uses === null || resp.uses === undefined) {
         unanswered.push(cat.name);
       }
@@ -78,25 +78,25 @@ export default function SurveyPage() {
     setValidationError('');
 
     if (step === 0) {
+      const missing = validateLikertSection('A');
+      if (missing.length > 0) {
+        setValidationError(`Please answer all items in Section A. Missing: ${missing.join(', ')}`);
+        return;
+      }
+    } else if (step === 1) {
       const missing = validateLikertSection('B');
       if (missing.length > 0) {
         setValidationError(`Please answer all items in Section B. Missing: ${missing.join(', ')}`);
         return;
       }
-    } else if (step === 1) {
+    } else if (step === 2) {
       const missing = validateLikertSection('C');
       if (missing.length > 0) {
         setValidationError(`Please answer all items in Section C. Missing: ${missing.join(', ')}`);
         return;
       }
-    } else if (step === 2) {
-      const missing = validateLikertSection('D');
-      if (missing.length > 0) {
-        setValidationError(`Please answer all items in Section D. Missing: ${missing.join(', ')}`);
-        return;
-      }
     } else if (step === 3) {
-      const missing = validateSectionA();
+      const missing = validateSectionD();
       if (missing.length > 0) {
         setValidationError(`Please indicate Yes or No for: ${missing.join(', ')}`);
         return;
@@ -129,9 +129,9 @@ export default function SurveyPage() {
         ...demographics,
       };
 
-      // Build Section A rows
-      const sectionA = sectionAData.categories.map((cat) => {
-        const resp = sectionAResponses[cat.id] || { uses: false, tools: [], other: '' };
+      // Build Section D rows
+      const sectionD = sectionDData.categories.map((cat) => {
+        const resp = sectionDResponses[cat.id] || { uses: false, tools: [], other: '' };
         return {
           category: cat.id,
           uses_category: resp.uses || false,
@@ -142,7 +142,7 @@ export default function SurveyPage() {
 
       // Build Likert rows
       const likertRows = [];
-      for (const sectionKey of ['B', 'C', 'D']) {
+      for (const sectionKey of ['A', 'B', 'C']) {
         for (const construct of likertSections[sectionKey].constructs) {
           for (const item of construct.items) {
             if (likertResponses[item.code]) {
@@ -158,7 +158,7 @@ export default function SurveyPage() {
 
       await submitSurvey({
         respondent,
-        sectionA,
+        sectionA: sectionD,
         likertResponses: likertRows,
       });
 
@@ -170,7 +170,7 @@ export default function SurveyPage() {
     }
   };
 
-  const sectionKeys = ['B', 'C', 'D'];
+  const sectionKeys = ['A', 'B', 'C'];
 
   return (
     <div className="app-container">
@@ -185,7 +185,7 @@ export default function SurveyPage() {
         <div className="validation-error">{validationError}</div>
       )}
 
-      {/* Steps 0-2: Likert Sections B, C, D */}
+      {/* Steps 0-2: Likert Sections A, B, C */}
       {step < 3 && (
         <LikertSection
           sectionData={likertSections[sectionKeys[step]]}
@@ -194,12 +194,12 @@ export default function SurveyPage() {
         />
       )}
 
-      {/* Step 3: Section A */}
+      {/* Step 3: Section D */}
       {step === 3 && (
-        <SectionA
-          sectionAData={sectionAData}
-          responses={sectionAResponses}
-          onUpdate={handleSectionAUpdate}
+        <SectionD
+          sectionDData={sectionDData}
+          responses={sectionDResponses}
+          onUpdate={handleSectionDUpdate}
         />
       )}
 

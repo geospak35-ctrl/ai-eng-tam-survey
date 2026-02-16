@@ -1,4 +1,4 @@
-const STEP_NAMES = ['Section B', 'Section C', 'Section D', 'Section A', 'Demographics'];
+const STEP_NAMES = ['Section A', 'Section B', 'Section C', 'Section D', 'Demographics'];
 
 export default function ProgressBar({ currentStep, totalSteps }) {
   const percentage = ((currentStep) / totalSteps) * 100;

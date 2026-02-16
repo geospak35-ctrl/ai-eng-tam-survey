@@ -35,7 +35,7 @@ CREATE TABLE respondents (
 );
 
 -- ============================================================
--- Table: section_a_responses (AI Tool Usage by Category)
+-- Table: section_a_responses (Section D: AI Tool Usage by Category)
 -- ============================================================
 CREATE TABLE section_a_responses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -48,12 +48,12 @@ CREATE TABLE section_a_responses (
 );
 
 -- ============================================================
--- Table: likert_responses (Sections B, C, D)
+-- Table: likert_responses (Sections A, B, C)
 -- ============================================================
 CREATE TABLE likert_responses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   respondent_id UUID NOT NULL REFERENCES respondents(id) ON DELETE CASCADE,
-  section TEXT NOT NULL CHECK (section IN ('B', 'C', 'D')),
+  section TEXT NOT NULL CHECK (section IN ('A', 'B', 'C')),
   item_code TEXT NOT NULL,        -- e.g. 'PU-L1', 'EJ3', 'AR2', 'CR5'
   value INTEGER NOT NULL CHECK (value >= 1 AND value <= 7),
   created_at TIMESTAMPTZ DEFAULT now(),
