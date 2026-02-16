@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import { fetchAllData, isAdminConfigured } from '../lib/supabase';
+import { fetchAllData } from '../lib/supabase';
 import { getLikertSections, CONSTRUCT_NAMES } from '../data/surveyData';
 import {
   descriptiveStats, oneWayAnova, frequencyDistribution,
@@ -40,17 +40,10 @@ export default function AdminDashboard() {
     setLoading(true);
     setError('');
     try {
-      if (!isAdminConfigured()) {
-        // Fall back to local storage if service key not configured
-        console.warn('Admin service key not configured; using local storage fallback.');
-      }
-      const result = await fetchAllData();
+      const result = await fetchAllData(ADMIN_PASSWORD);
       setData(result);
     } catch (err) {
-      const hint = !isAdminConfigured()
-        ? ' (VITE_SUPABASE_SERVICE_KEY may not be set in environment variables)'
-        : '';
-      setError(`Failed to load data: ${err.message}${hint}`);
+      setError(`Failed to load data: ${err.message}`);
     } finally {
       setLoading(false);
     }

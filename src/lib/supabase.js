@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-const supabaseServiceKey = import.meta.env.VITE_SUPABASE_SERVICE_KEY || '';
 
 // Client for survey respondents (anon key, can only insert)
 export const supabase = supabaseUrl && supabaseAnonKey
@@ -11,23 +10,6 @@ export const supabase = supabaseUrl && supabaseAnonKey
 
 // Check if Supabase is configured
 export const isSupabaseConfigured = () => Boolean(supabaseUrl && supabaseAnonKey);
-export const isAdminConfigured = () => Boolean(supabaseUrl && supabaseServiceKey);
-
-// Admin fetch helper — uses direct fetch with service_role key to bypass RLS
-async function adminFetch(table) {
-  const res = await fetch(`${supabaseUrl}/rest/v1/${table}?select=*`, {
-    headers: {
-      apikey: supabaseServiceKey,
-      Authorization: `Bearer ${supabaseServiceKey}`,
-      Accept: 'application/json',
-    },
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.message || `HTTP ${res.status} fetching ${table}`);
-  }
-  return res.json();
-}
 
 // ============================================================
 // Local storage fallback for development/demo without Supabase
@@ -103,18 +85,22 @@ export async function submitSurvey({ respondent, sectionA, likertResponses }) {
   return respondentId;
 }
 
-export async function fetchAllData() {
-  if (isAdminConfigured()) {
-    const [respondents, sectionA, likert] = await Promise.all([
-      adminFetch('respondents'),
-      adminFetch('section_a_responses'),
-      adminFetch('likert_responses'),
-    ]);
-
-    return { respondents, sectionA, likert };
+export async function fetchAllData(adminPassword) {
+  if (isSupabaseConfigured()) {
+    // Call the server-side API route (keeps service_role key safe on the server)
+    const res = await fetch('/api/admin-data', {
+      headers: {
+        'x-admin-password': adminPassword || '',
+      },
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || `HTTP ${res.status}`);
+    }
+    return res.json();
   }
 
-  // Local fallback
+  // Local fallback for development/demo without Supabase
   const all = getLocalResponses();
   return {
     respondents: all.map((e) => e.respondent),
