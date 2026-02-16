@@ -9,9 +9,16 @@ export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
-// Client for admin dashboard (service key, can read all data)
+// Client for admin dashboard (service key, can read all data bypassing RLS)
+// Uses anon key for the apikey header but overrides auth with service_role token
 export const supabaseAdmin = supabaseUrl && supabaseServiceKey
-  ? createClient(supabaseUrl, supabaseServiceKey)
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${supabaseServiceKey}`,
+        },
+      },
+    })
   : null;
 
 // Check if Supabase is configured
