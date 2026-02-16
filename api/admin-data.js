@@ -32,6 +32,16 @@ export default async function handler(req, res) {
     });
   }
 
+  // Diagnostics (safe — only lengths and booleans, no secret values)
+  const diag = {
+    urlSource: process.env.SUPABASE_URL ? 'SUPABASE_URL' : (process.env.VITE_SUPABASE_URL ? 'VITE_SUPABASE_URL' : 'none'),
+    keySource: process.env.SUPABASE_SERVICE_KEY ? 'SUPABASE_SERVICE_KEY' : (process.env.VITE_SUPABASE_SERVICE_KEY ? 'VITE_SUPABASE_SERVICE_KEY' : 'none'),
+    urlLength: supabaseUrl.length,
+    keyLength: serviceKey.length,
+    keyStart: serviceKey.substring(0, 10) + '...',
+    keyEnd: '...' + serviceKey.substring(serviceKey.length - 10),
+  };
+
   try {
     const fetchTable = async (table) => {
       const response = await fetch(`${supabaseUrl}/rest/v1/${table}?select=*`, {
@@ -56,6 +66,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ respondents, sectionA, likert });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message, diagnostics: diag });
   }
 }
