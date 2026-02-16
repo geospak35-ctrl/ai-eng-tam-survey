@@ -9,19 +9,25 @@ export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
-// Client for admin dashboard (service key bypasses RLS to read all data)
-export const supabaseAdmin = supabaseUrl && supabaseServiceKey
-  ? createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    })
-  : null;
-
 // Check if Supabase is configured
 export const isSupabaseConfigured = () => Boolean(supabaseUrl && supabaseAnonKey);
 export const isAdminConfigured = () => Boolean(supabaseUrl && supabaseServiceKey);
+
+// Admin fetch helper — uses direct fetch with service_role key to bypass RLS
+async function adminFetch(table) {
+  const res = await fetch(`${supabaseUrl}/rest/v1/${table}?select=*`, {
+    headers: {
+      apikey: supabaseServiceKey,
+      Authorization: `Bearer ${supabaseServiceKey}`,
+      Accept: 'application/json',
+    },
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || `HTTP ${res.status} fetching ${table}`);
+  }
+  return res.json();
+}
 
 // ============================================================
 // Local storage fallback for development/demo without Supabase
@@ -98,22 +104,14 @@ export async function submitSurvey({ respondent, sectionA, likertResponses }) {
 }
 
 export async function fetchAllData() {
-  if (supabaseAdmin && isAdminConfigured()) {
-    const [respResult, secAResult, likertResult] = await Promise.all([
-      supabaseAdmin.from('respondents').select('*'),
-      supabaseAdmin.from('section_a_responses').select('*'),
-      supabaseAdmin.from('likert_responses').select('*'),
+  if (isAdminConfigured()) {
+    const [respondents, sectionA, likert] = await Promise.all([
+      adminFetch('respondents'),
+      adminFetch('section_a_responses'),
+      adminFetch('likert_responses'),
     ]);
 
-    if (respResult.error) throw respResult.error;
-    if (secAResult.error) throw secAResult.error;
-    if (likertResult.error) throw likertResult.error;
-
-    return {
-      respondents: respResult.data,
-      sectionA: secAResult.data,
-      likert: likertResult.data,
-    };
+    return { respondents, sectionA, likert };
   }
 
   // Local fallback
