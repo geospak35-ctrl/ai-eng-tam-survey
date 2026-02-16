@@ -41,15 +41,15 @@ function saveLocalResponses(responses) {
 
 export async function submitSurvey({ respondent, sectionA, likertResponses }) {
   if (supabase && isSupabaseConfigured()) {
-    // Insert respondent
-    const { data: respData, error: respError } = await supabase
+    // Generate UUID client-side so we don't need SELECT permission after insert
+    const respondentId = crypto.randomUUID();
+
+    // Insert respondent with the pre-generated ID
+    const { error: respError } = await supabase
       .from('respondents')
-      .insert(respondent)
-      .select('id')
-      .single();
+      .insert({ id: respondentId, ...respondent });
 
     if (respError) throw respError;
-    const respondentId = respData.id;
 
     // Insert Section A responses
     if (sectionA.length > 0) {
