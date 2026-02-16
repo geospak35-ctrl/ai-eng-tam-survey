@@ -18,8 +18,17 @@ export default async function handler(req, res) {
   const serviceKey = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_SERVICE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
+    // Diagnostic info (no secrets leaked — just shows which vars exist)
+    const diag = {
+      SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
+      VITE_SUPABASE_URL: Boolean(process.env.VITE_SUPABASE_URL),
+      SUPABASE_SERVICE_KEY: Boolean(process.env.SUPABASE_SERVICE_KEY),
+      VITE_SUPABASE_SERVICE_KEY: Boolean(process.env.VITE_SUPABASE_SERVICE_KEY),
+      serviceKeyLength: serviceKey ? serviceKey.length : 0,
+    };
     return res.status(500).json({
-      error: 'Server misconfigured: SUPABASE_URL or SUPABASE_SERVICE_KEY not set',
+      error: 'Server misconfigured: missing environment variables. Please add SUPABASE_URL and SUPABASE_SERVICE_KEY in Vercel Settings > Environment Variables.',
+      diagnostics: diag,
     });
   }
 
