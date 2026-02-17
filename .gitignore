@@ -17,6 +17,9 @@ dist-ssr
 .env.local
 .env.production
 
+# Archive/backup data (keep local only)
+archive_*/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

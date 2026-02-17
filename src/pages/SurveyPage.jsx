@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getSectionDData, getLikertSections } from '../data/surveyData';
+import { getSectionDData, getLikertSections, DEMOGRAPHICS } from '../data/surveyData';
 import { submitSurvey } from '../lib/supabase';
 import ProgressBar from '../components/ProgressBar';
 import LikertSection from '../components/LikertSection';
@@ -20,6 +20,7 @@ export default function SurveyPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const accessCode = location.state?.accessCode || '';
+  const repeatFlag = location.state?.repeatFlag || false;
 
   // Redirect if no valid stakeholder type
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function SurveyPage() {
   const [likertResponses, setLikertResponses] = useState({});
   const [sectionDResponses, setSectionDResponses] = useState({});
   const [demographics, setDemographics] = useState({});
+  const [demoValidationErrors, setDemoValidationErrors] = useState({});
   const [validationError, setValidationError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -74,6 +76,18 @@ export default function SurveyPage() {
     return unanswered;
   };
 
+  // Validate required demographics fields
+  const validateDemographics = () => {
+    const errors = {};
+    const demoFields = DEMOGRAPHICS[stakeholderType]?.fields || [];
+    for (const field of demoFields) {
+      if (field.required && (!demographics[field.id] || demographics[field.id].trim() === '')) {
+        errors[field.id] = 'This field is required';
+      }
+    }
+    return errors;
+  };
+
   const handleNext = () => {
     setValidationError('');
 
@@ -114,10 +128,20 @@ export default function SurveyPage() {
       setStep(step - 1);
       window.scrollTo(0, 0);
       setValidationError('');
+      setDemoValidationErrors({});
     }
   };
 
   const handleSubmit = async () => {
+    // Validate required demographics fields before submitting
+    const demoErrors = validateDemographics();
+    if (Object.keys(demoErrors).length > 0) {
+      setDemoValidationErrors(demoErrors);
+      setValidationError('Please fill in all required fields before submitting.');
+      return;
+    }
+    setDemoValidationErrors({});
+
     setSubmitting(true);
     setValidationError('');
 
@@ -126,6 +150,7 @@ export default function SurveyPage() {
       const respondent = {
         stakeholder_type: stakeholderType,
         access_code: accessCode,
+        repeat_flag: repeatFlag,
         ...demographics,
       };
 
@@ -161,6 +186,13 @@ export default function SurveyPage() {
         sectionA: sectionD,
         likertResponses: likertRows,
       });
+
+      // Set localStorage flag to detect future repeat submissions
+      try {
+        localStorage.setItem(`ai_eng_tam_submitted_${stakeholderType}`, 'true');
+      } catch {
+        // localStorage may not be available; ignore silently
+      }
 
       navigate('/thank-you');
     } catch (err) {
@@ -209,6 +241,7 @@ export default function SurveyPage() {
           stakeholderType={stakeholderType}
           values={demographics}
           onChange={setDemographics}
+          validationErrors={demoValidationErrors}
         />
       )}
 

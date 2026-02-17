@@ -364,6 +364,38 @@
   margin-bottom: 1rem;
 }
 
+/* Required field asterisk */
+.required-asterisk {
+  color: var(--error);
+  font-weight: bold;
+}
+
+/* Field-level error styling */
+.demo-field-error label {
+  color: var(--error);
+}
+.input-error {
+  border-color: var(--error) !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
+}
+.field-error-message {
+  color: var(--error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Repeat submission warning */
+.repeat-warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
 /* ============================================================
    Thank You Page
    ============================================================ */

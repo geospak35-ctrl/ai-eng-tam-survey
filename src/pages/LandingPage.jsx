@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ACCESS_CODES } from '../data/surveyData';
 
@@ -24,6 +24,22 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [codes, setCodes] = useState({ faculty: '', student: '', practitioner: '' });
   const [errors, setErrors] = useState({});
+  const [repeatWarnings, setRepeatWarnings] = useState({});
+
+  // Check localStorage for prior submissions on mount
+  useEffect(() => {
+    const warnings = {};
+    for (const s of STAKEHOLDER_INFO) {
+      try {
+        if (localStorage.getItem(`ai_eng_tam_submitted_${s.type}`) === 'true') {
+          warnings[s.type] = true;
+        }
+      } catch {
+        // localStorage may not be available
+      }
+    }
+    setRepeatWarnings(warnings);
+  }, []);
 
   const handleCodeChange = (type, value) => {
     setCodes((prev) => ({ ...prev, [type]: value }));
@@ -35,7 +51,8 @@ export default function LandingPage() {
   const handleSubmit = (type) => {
     const enteredCode = codes[type].trim().toUpperCase();
     if (enteredCode === ACCESS_CODES[type]) {
-      navigate(`/survey/${type}`, { state: { accessCode: enteredCode } });
+      const isRepeat = repeatWarnings[type] || false;
+      navigate(`/survey/${type}`, { state: { accessCode: enteredCode, repeatFlag: isRepeat } });
     } else {
       setErrors((prev) => ({ ...prev, [type]: 'Invalid access code' }));
     }
@@ -58,6 +75,12 @@ export default function LandingPage() {
           <div className="landing-card" key={s.type}>
             <h3>{s.title}</h3>
             <p>{s.description}</p>
+            {repeatWarnings[s.type] && (
+              <div className="repeat-warning">
+                It appears you have already completed this survey on this device.
+                You may proceed, but your response will be flagged as a repeat submission.
+              </div>
+            )}
             <div className="access-form">
               <input
                 type="text"

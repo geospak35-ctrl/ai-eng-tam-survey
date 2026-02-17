@@ -11,7 +11,11 @@ CREATE TABLE respondents (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   stakeholder_type TEXT NOT NULL CHECK (stakeholder_type IN ('faculty', 'student', 'practitioner')),
   access_code TEXT NOT NULL,
+  repeat_flag BOOLEAN DEFAULT false,   -- true if browser detected a prior submission
   created_at TIMESTAMPTZ DEFAULT now(),
+
+  -- Shared demographics (all stakeholder types)
+  institution_or_company TEXT,          -- required: institution (faculty/student) or company (practitioner)
 
   -- Faculty demographics
   engineering_discipline TEXT,

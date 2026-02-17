@@ -604,8 +604,9 @@ export function getAllItemCodes(stakeholderType) {
 // Demographics fields per stakeholder
 export const DEMOGRAPHICS = {
   faculty: {
-    title: 'Optional Demographics',
+    title: 'Demographics',
     fields: [
+      { id: 'institution_or_company', label: 'Institution', type: 'text', required: true },
       { id: 'engineering_discipline', label: 'Engineering discipline(s)', type: 'text' },
       { id: 'years_in_academia', label: 'Years in academia', type: 'select', options: ['0\u20135', '6\u201310', '11\u201320', '21+'] },
       { id: 'primary_role', label: 'Primary role', type: 'select', options: ['Teaching', 'Research', 'Administration', 'Combination'] },
@@ -615,8 +616,9 @@ export const DEMOGRAPHICS = {
     ],
   },
   student: {
-    title: 'Optional Demographics',
+    title: 'Demographics',
     fields: [
+      { id: 'institution_or_company', label: 'Institution', type: 'text', required: true },
       { id: 'major_program', label: 'Major / Program', type: 'text' },
       { id: 'year_in_program', label: 'Year in program', type: 'select', options: ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'] },
       { id: 'prior_ai_experience', label: 'Prior experience with AI tools', type: 'select', options: ['None', 'Limited', 'Moderate', 'Extensive'] },
@@ -624,8 +626,9 @@ export const DEMOGRAPHICS = {
     ],
   },
   practitioner: {
-    title: 'Optional Demographics',
+    title: 'Demographics',
     fields: [
+      { id: 'institution_or_company', label: 'Company / Organization', type: 'text', required: true },
       { id: 'engineering_discipline', label: 'Engineering discipline(s)', type: 'text' },
       { id: 'years_professional_experience', label: 'Years of professional experience', type: 'select', options: ['0\u20135', '6\u201310', '11\u201320', '21+'] },
       { id: 'practitioner_role', label: 'Primary role', type: 'select-other', options: ['Engineer', 'Manager', 'Technical Lead', 'Hiring Manager'], otherField: 'practitioner_role_other' },
@@ -656,7 +659,7 @@ export const CONSTRUCT_NAMES = {
 
 // Access codes for each stakeholder group (configurable)
 export const ACCESS_CODES = {
-  faculty: 'FACULTY2025',
+  faculty: 'FACULTY7389',
   student: 'STUDENT2025',
-  practitioner: 'PRACTITIONER2025',
+  practitioner: 'PRACTITIONER1023',
 };
