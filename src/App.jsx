@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage';
 import SurveyPage from './pages/SurveyPage';
 import ThankYouPage from './pages/ThankYouPage';
 import AdminDashboard from './pages/AdminDashboard';
+import PreviewPage from './pages/PreviewPage';
 import './App.css';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/survey/:stakeholderType" element={<SurveyPage />} />
         <Route path="/thank-you" element={<ThankYouPage />} />
+        <Route path="/preview/:stakeholderType" element={<PreviewPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>

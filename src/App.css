@@ -397,6 +397,91 @@
 }
 
 /* ============================================================
+   Preview Page (Read-Only Survey View)
+   ============================================================ */
+.preview-banner {
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.03em;
+}
+.preview-note {
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 0.88rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  font-style: italic;
+}
+.preview-legend {
+  background: var(--primary-bg);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.78rem;
+  color: var(--gray-600);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.preview-container .likert-scale input[type="radio"],
+.preview-container .gate-buttons input[type="radio"],
+.preview-container .tool-checkboxes input[type="checkbox"],
+.preview-container .demographics-form input,
+.preview-container .demographics-form select,
+.preview-container .other-tool-input input {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.preview-section {
+  border-bottom: 2px solid var(--gray-100);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.preview-tool-category {
+  border-bottom: 1px solid var(--gray-100);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+.preview-footer {
+  text-align: center;
+  color: var(--gray-400);
+  font-size: 0.85rem;
+  font-style: italic;
+  padding: 2rem 0;
+  border-top: 2px solid var(--gray-100);
+  margin-top: 1rem;
+}
+
+/* Print styles for preview */
+@media print {
+  .preview-banner {
+    background: #333 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .preview-container {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+  .preview-section {
+    break-inside: avoid;
+  }
+  .construct-group {
+    break-inside: avoid;
+  }
+  .likert-item {
+    break-inside: avoid;
+  }
+  .tool-category {
+    break-inside: avoid;
+  }
+}
+
+/* ============================================================
    Thank You Page
    ============================================================ */
 .thank-you {
