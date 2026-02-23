@@ -43,19 +43,38 @@ export default async function handler(req, res) {
   };
 
   try {
+    // Fetch all rows from a table, paginating in batches to avoid the
+    // PostgREST default 1000-row limit.
     const fetchTable = async (table) => {
-      const response = await fetch(`${supabaseUrl}/rest/v1/${table}?select=*`, {
-        headers: {
-          apikey: serviceKey,
-          Authorization: `Bearer ${serviceKey}`,
-          Accept: 'application/json',
-        },
-      });
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        throw new Error(body.message || `HTTP ${response.status} fetching ${table}`);
+      const PAGE_SIZE = 1000;
+      let allRows = [];
+      let offset = 0;
+      let done = false;
+
+      while (!done) {
+        const url = `${supabaseUrl}/rest/v1/${table}?select=*&order=id&limit=${PAGE_SIZE}&offset=${offset}`;
+        const response = await fetch(url, {
+          headers: {
+            apikey: serviceKey,
+            Authorization: `Bearer ${serviceKey}`,
+            Accept: 'application/json',
+            Prefer: 'count=exact',
+          },
+        });
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body.message || `HTTP ${response.status} fetching ${table}`);
+        }
+        const rows = await response.json();
+        allRows = allRows.concat(rows);
+        if (rows.length < PAGE_SIZE) {
+          done = true;
+        } else {
+          offset += PAGE_SIZE;
+        }
       }
-      return response.json();
+
+      return allRows;
     };
 
     const [respondents, sectionA, likert] = await Promise.all([
